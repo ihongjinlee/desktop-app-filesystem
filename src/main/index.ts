@@ -56,11 +56,20 @@ app.whenReady().then(() => {
   // IPC
   ipcMain.on('create-folder', (_event, folderPath) => {
     try {
+      // 폴더 생성
       fs.ensureDir(folderPath)
-      return true // 성공적으로 생성되면 true를 반환
+      console.log(`폴더가 성공적으로 생성되었습니다: ${folderPath}`)
+
+      // 폴더 내부로 파일 이동
+      const sourceFilePath = 'resources/icon.png'
+      const destinationFilePath = `${folderPath}/newIcon.png`
+      fs.copy(sourceFilePath, destinationFilePath)
+      console.log(`파일이 성공적으로 이동되었습니다: ${destinationFilePath}`)
+
+      return true
     } catch (error) {
       console.error('폴더를 생성하는 동안 오류가 발생했습니다:', error)
-      return false // 오류 발생시 false를 반환
+      return false
     }
   })
 
