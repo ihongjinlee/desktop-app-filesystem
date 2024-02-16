@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+const fs = require('fs-extra')
 
 function createWindow(): void {
   // Create the browser window.
@@ -51,6 +52,17 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  // IPC
+  ipcMain.on('create-folder', (_event, folderPath) => {
+    try {
+      fs.ensureDir(folderPath)
+      return true // 성공적으로 생성되면 true를 반환
+    } catch (error) {
+      console.error('폴더를 생성하는 동안 오류가 발생했습니다:', error)
+      return false // 오류 발생시 false를 반환
+    }
+  })
 
   createWindow()
 
