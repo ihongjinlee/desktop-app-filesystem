@@ -3,6 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 const fs = require('fs-extra')
+import { exec } from 'child_process'
 
 function createWindow(): void {
   // Create the browser window.
@@ -82,6 +83,20 @@ app.whenReady().then(() => {
     }
   })
 
+  ipcMain.on('run-exe', (_event, filePath) => {
+    console.log(filePath)
+
+    exec(filePath, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`명령어 실행 중 오류 발생: ${error}`)
+        return
+      }
+      console.log(`프로세스가 종료되었습니다. stdout: ${stdout}`)
+      if (stderr) {
+        console.error(`stderr: ${stderr}`)
+      }
+    })
+  })
   createWindow()
 
   app.on('activate', function () {
