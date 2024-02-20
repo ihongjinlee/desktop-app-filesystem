@@ -73,6 +73,15 @@ app.whenReady().then(() => {
     }
   })
 
+  ipcMain.on('create-text-file', (_event, filePath, content) => {
+    try {
+      fs.outputFile(filePath, content)
+      console.log(`텍스트 파일이 성공적으로 생성되었습니다: ${filePath}`)
+    } catch (error) {
+      console.error(`텍스트 파일을 생성하는 동안 오류가 발생했습니다: ${error}`)
+    }
+  })
+
   createWindow()
 
   app.on('activate', function () {
